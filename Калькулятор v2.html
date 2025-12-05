@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор - ПАРИТЕТ ДЕВЕЛОПМЕНТ</title>
+    <title>Набор калькуляторов - ПАРИТЕТ ДЕВЕЛОПМЕНТ</title>
     <style>
         /* Основные цвета бренда */
         :root {
@@ -277,67 +277,22 @@
             margin: 15px 0;
         }
         
-        .value-display {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
+        .bank-discount {
+            background: #d1ecf1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
         }
         
-        .input-with-slider {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .manual-input {
-            width: 150px;
-        }
-        
-        .term-info {
-            font-size: 0.9em;
-            color: var(--dark-gray);
-            margin-top: 5px;
+        .info {
+            color: #17a2b8;
+            font-weight: bold;
         }
         
         .min-payment-info {
             font-size: 0.9em;
             color: var(--dark-gray);
             margin-top: 5px;
-        }
-        
-        .complex-display {
-            padding: 8px;
-            background: #f8d7da;
-            border-radius: 4px;
-            border: 1px solid var(--red);
-            font-weight: bold;
-            color: #721c24;
-        }
-        
-        input[type="range"] {
-            -webkit-appearance: none;
-            height: 8px;
-            border-radius: 5px;
-            background: #d1d1d1;
-            outline: none;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--red);
-            cursor: pointer;
-        }
-        
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--red);
-            cursor: pointer;
         }
         
         @media (max-width: 768px) {
@@ -359,10 +314,8 @@
     <div class="header">
         <h1>Набор калькуляторов</h1>
         <div class="calculator-buttons">
-            <button class="calc-button active" data-calc="chpv">Расчет ЧПВ</button>
-            <button class="calc-button" data-calc="chpv-chp">Расчет ЧПВ в ЧП</button>
+            <button class="calc-button active" data-calc="chpv">Расчет ЧПВ 300 000</button>
             <button class="calc-button" data-calc="kv">Расчет КВ</button>
-            <button class="calc-button" data-calc="installment">Расчет рассрочки</button>
         </div>
     </div>
 
@@ -403,7 +356,6 @@
                     Эта квартира уже продана
                 </div>
 
-                <!-- Убрана цена со скидкой из отображения -->
                 <div class="price-comparison">
                     <div>
                         <strong>Цена квартиры:</strong><br>
@@ -418,6 +370,16 @@
                     </div>
                     <div style="font-size: 0.9em; color: var(--dark-gray);">
                         При включенной скидке менеджера цена уменьшается на 100,000 ₽
+                    </div>
+                </div>
+                
+                <div class="bank-discount">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="chpv-bankDiscount">
+                        <label for="chpv-bankDiscount">для Альфа Банка</label>
+                    </div>
+                    <div style="font-size: 0.9em; color: #17a2b8;">
+                        При включении добавляется комиссия банка 4,3% от тела кредита
                     </div>
                 </div>
                 
@@ -469,6 +431,14 @@
                     <span id="chpv-resultLoanBody" class="highlight">0 ₽</span>
                 </div>
                 <div class="result-item">
+                    <span>Процент ПВ:</span>
+                    <span id="chpv-resultPVPercent" class="highlight">0%</span>
+                </div>
+                <div id="chpv-bankCommissionItem" class="result-item" style="display: none;">
+                    <span>Комиссия банка (4,3%):</span>
+                    <span id="chpv-resultBankCommission" class="info">0 ₽</span>
+                </div>
+                <div class="result-item">
                     <span>Скидка на квартиру без учета ремонта:</span>
                     <span id="chpv-resultDiscountWithoutRepair" class="no-discount">Нет скидки</span>
                 </div>
@@ -481,124 +451,6 @@
                     <div id="chpv-apartmentRooms"></div>
                     <div id="chpv-apartmentArea"></div>
                     <div id="chpv-apartmentPlan"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Калькулятор ЧПВ в ЧП -->
-    <div id="chpv-chp-calculator" class="calculator-section">
-        <div class="calculator-container">
-            <div class="calculator-form">
-                <h2>Калькулятор рассрочки для квартиры</h2>
-
-                <!-- Выбор квартиры -->
-                <div class="form-group">
-                    <label>Жилой комплекс:</label>
-                    <div class="complex-display">ЧИСТЫЕ ПРУДЫ</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="chpv-chp-sectionSelect">Название дома:</label>
-                    <select id="chpv-chp-sectionSelect">
-                        <option value="">Загрузка...</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="chpv-chp-apartmentSelect">Квартира:</label>
-                    <select id="chpv-chp-apartmentSelect" disabled>
-                        <option value="">Сначала выберите дом</option>
-                    </select>
-                </div>
-
-                <div id="chpv-chp-selectedApartmentInfo" class="apartment-info" style="display: none;">
-                    <strong>Выбранная квартира:</strong>
-                    <div id="chpv-chp-apartmentDetails"></div>
-                </div>
-
-                <div id="chpv-chp-soldNotice" class="sold-notice" style="display: none;">
-                    Эта квартира уже продана
-                </div>
-
-                <!-- Убрана цена со скидкой из отображения -->
-                <div class="price-comparison">
-                    <div>
-                        <strong>Цена квартиры:</strong><br>
-                        <span id="chpv-chp-basePriceDisplay">0 ₽</span>
-                    </div>
-                </div>
-                
-                <div class="manager-discount">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="chpv-chp-managerDiscount">
-                        <label for="chpv-chp-managerDiscount">Скидка менеджера</label>
-                    </div>
-                    <div style="font-size: 0.9em; color: var(--dark-gray);">
-                        При включенной скидке менеджера цена уменьшается на 100,000 ₽
-                    </div>
-                </div>
-                
-                <!-- Дополнительные расходы -->
-                <div class="additional-costs">
-                    <div class="form-group">
-                        <label for="chpv-chp-repairCost">Цена ремонта (₽):</label>
-                        <input type="number" id="chpv-chp-repairCost" value="0" min="0" step="10000">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="chpv-chp-dduObjects">Объекты, зашитые в ДДУ (₽):</label>
-                        <input type="number" id="chpv-chp-dduObjects" value="0" min="0" step="10000">
-                    </div>
-                </div>
-                
-                <!-- Первоначальный взнос клиента -->
-                <div class="form-group">
-                    <label for="chpv-chp-clientDownPayment">Первоначальный взнос клиента (₽):</label>
-                    <input type="number" id="chpv-chp-clientDownPayment" value="0" min="0" step="10000">
-                    <div id="chpv-chp-minPaymentInfo" class="min-payment-info"></div>
-                </div>
-                
-                <div id="chpv-chp-paymentWarning" class="payment-warning" style="display: none;">
-                    Первоначальный взнос клиента меньше минимального требуемого!
-                </div>
-            </div>
-            
-            <div class="calculator-results">
-                <h2>Результаты расчета:</h2>
-                <div class="result-item">
-                    <span>Стоимость договора для ДДУ:</span>
-                    <span id="chpv-chp-resultContractPrice" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Общий ПВ:</span>
-                    <span id="chpv-chp-resultTotalPV" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Паритет ПВ:</span>
-                    <span id="chpv-chp-resultCompanyPV" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Клиента ПВ:</span>
-                    <span id="chpv-chp-resultClientPV" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Тело кредита:</span>
-                    <span id="chpv-chp-resultLoanBody" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Скидка на квартиру без учета ремонта:</span>
-                    <span id="chpv-chp-resultDiscountWithoutRepair" class="no-discount">Нет скидки</span>
-                </div>
-                
-                <div id="chpv-chp-apartmentFullDetails" class="apartment-details" style="display: none;">
-                    <h3>Информация о квартире:</h3>
-                    <div id="chpv-chp-apartmentComplex"></div>
-                    <div id="chpv-chp-apartmentSection"></div>
-                    <div id="chpv-chp-apartmentNumber"></div>
-                    <div id="chpv-chp-apartmentRooms"></div>
-                    <div id="chpv-chp-apartmentArea"></div>
-                    <div id="chpv-chp-apartmentPlan"></div>
                 </div>
             </div>
         </div>
@@ -641,7 +493,6 @@
                     Эта квартира уже продана
                 </div>
 
-                <!-- Убрана цена со скидкой из отображения -->
                 <div class="price-comparison">
                     <div>
                         <strong>Цена квартиры:</strong><br>
@@ -753,141 +604,6 @@
         </div>
     </div>
 
-    <!-- Калькулятор рассрочки -->
-    <div id="installment-calculator" class="calculator-section">
-        <div class="calculator-container">
-            <div class="calculator-form">
-                <h2>Калькулятор рассрочки для квартиры</h2>
-
-                <!-- Выбор квартиры -->
-                <div class="form-group">
-                    <label for="installment-complexSelect">Жилой комплекс:</label>
-                    <select id="installment-complexSelect">
-                        <option value="">Загрузка...</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="installment-sectionSelect">Название дома:</label>
-                    <select id="installment-sectionSelect" disabled>
-                        <option value="">Сначала выберите ЖК</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="installment-apartmentSelect">Квартира:</label>
-                    <select id="installment-apartmentSelect" disabled>
-                        <option value="">Сначала выберите дом</option>
-                    </select>
-                </div>
-
-                <div id="installment-selectedApartmentInfo" class="apartment-info" style="display: none;">
-                    <strong>Выбранная квартира:</strong>
-                    <div id="installment-apartmentDetails"></div>
-                </div>
-
-                <div id="installment-soldNotice" class="sold-notice" style="display: none;">
-                    Эта квартира уже продана
-                </div>
-
-                <div class="price-comparison">
-                    <div>
-                        <strong>Цена:</strong><br>
-                        <span id="installment-basePriceDisplay">0 ₽</span>
-                    </div>
-                    <div>
-                        <strong>Цена со скидкой:</strong><br>
-                        <span class="discount" id="installment-discountPriceDisplay">0 ₽</span>
-                    </div>
-                </div>
-                
-                <div class="manager-discount">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="installment-managerDiscount">
-                        <label for="installment-managerDiscount">Скидка менеджера</label>
-                    </div>
-                    <div style="font-size: 0.9em; color: var(--dark-gray);">
-                        При включенной скидке менеджера цена уменьшается на 100,000 ₽
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="installment-downPayment">Первоначальный взнос (ПВ):</label>
-                    <div class="input-with-slider">
-                        <input type="number" id="installment-downPaymentManualRub" class="manual-input" value="0" min="0" step="10000">
-                        <span>₽</span>
-                    </div>
-                    <input type="range" id="installment-downPayment" min="15" max="80" value="15" step="1">
-                    <div class="value-display">
-                        <span>15% (нет скидки)</span>
-                        <span id="installment-downPaymentValue">15%</span>
-                        <span>80% (макс. скидка)</span>
-                    </div>
-                    <div id="installment-downPaymentAmount">0 ₽</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="installment-term">Срок рассрочки (месяцев):</label>
-                    <input type="range" id="installment-term" min="1" max="12" value="1" step="1">
-                    <div class="value-display">
-                        <span id="installment-termMin">1 мес</span>
-                        <span id="installment-termValue">1 мес</span>
-                        <span id="installment-termMax">12 мес</span>
-                    </div>
-                    <div id="installment-termInfo" class="term-info"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="installment-monthlyPayment">Желаемый ежемесячный платеж:</label>
-                    <input type="number" id="installment-monthlyPayment" value="0" min="0" step="10000">
-                    <div id="installment-minPaymentInfo" class="min-payment-info"></div>
-                </div>
-            </div>
-            
-            <div class="calculator-results">
-                <h2>Результаты расчета:</h2>
-                <div class="result-item">
-                    <span>Итоговая цена квартиры:</span>
-                    <span id="installment-resultFinalPrice" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Первоначальный взнос:</span>
-                    <span id="installment-resultDownPayment" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Сумма рассрочки:</span>
-                    <span id="installment-resultLoanAmount" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Ежемесячный платеж:</span>
-                    <span id="installment-resultMonthlyPayment" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Всего выплат по рассрочке:</span>
-                    <span id="installment-resultTotalPayments" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Остаток в конце срока:</span>
-                    <span id="installment-resultRemainingAmount" class="highlight">0 ₽</span>
-                </div>
-                <div class="result-item">
-                    <span>Общая сумма к оплате:</span>
-                    <span id="installment-resultTotalAmount" class="highlight">0 ₽</span>
-                </div>
-                
-                <div id="installment-apartmentFullDetails" class="apartment-details" style="display: none;">
-                    <h3>Информация о квартире:</h3>
-                    <div id="installment-apartmentComplex"></div>
-                    <div id="installment-apartmentSection"></div>
-                    <div id="installment-apartmentNumber"></div>
-                    <div id="installment-apartmentRooms"></div>
-                    <div id="installment-apartmentArea"></div>
-                    <div id="installment-apartmentPlan"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Общие функции
         function formatMoney(amount) {
@@ -925,7 +641,53 @@
         });
 
         // ==================== КАЛЬКУЛЯТОР ЧПВ ====================
-        (function() {
+        // Данные для калькулятора ЧПВ
+        const chpvApartmentsData = [];
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVMdD1qLq8N3hBj1OV-xVXz5T9wwOcDTPSa09j5Ty7kxm7YY1SErU5fXkoqWxO2zZ2/exec';
+
+        // Коэффициенты для расчета минимального ПВ
+        const coefficients = {
+            'АСТРО': [
+                { max: 5000000, value: 0.10 },
+                { max: 8000000, value: 0.12 },
+                { max: 12000000, value: 0.15 }
+            ],
+            'ЧИСТЫЕ ПРУДЫ': [
+                { max: 5000000, value: 0.095 },
+                { max: 8000000, value: 0.105 },
+                { max: 14000000, value: 0.135 }
+            ],
+            'Счастье': [
+                { max: 2000000, value: 0.065 },
+                { max: 3500000, value: 0.09 },
+                { max: 6500000, value: 0.11 }
+            ],
+            'Тёплые кварталы': [
+                { max: 5000000, value: 0.105 },
+                { max: 8000000, value: 0.125 },
+                { max: 14000000, value: 0.145 }
+            ],
+            'Бодровский': [
+                { max: 5000000, value: 0.10 },
+                { max: 8000000, value: 0.12 },
+                { max: 14000000, value: 0.14 }
+            ],
+            'Комсомольский': [
+                { max: 5000000, value: 0.10 },
+                { max: 8000000, value: 0.12 },
+                { max: 14000000, value: 0.14 }
+            ]
+        };
+
+        // ЖК с фиксированным минимальным ПВ 300 000 ₽
+        const fixedMinPaymentComplexes = ['Бодровский', 'Комсомольский', 'ЧИСТЫЕ ПРУДЫ'];
+        const FIXED_MIN_PAYMENT = 300000;
+
+        // Комиссия банка
+        const BANK_COMMISSION_RATE = 0.043; // 4.3%
+
+        // Инициализация калькулятора ЧПВ
+        function initChpvCalculator() {
             // Элементы DOM
             const complexSelect = document.getElementById('chpv-complexSelect');
             const sectionSelect = document.getElementById('chpv-sectionSelect');
@@ -935,6 +697,7 @@
             const soldNotice = document.getElementById('chpv-soldNotice');
             const basePriceDisplay = document.getElementById('chpv-basePriceDisplay');
             const managerDiscountCheckbox = document.getElementById('chpv-managerDiscount');
+            const bankDiscountCheckbox = document.getElementById('chpv-bankDiscount');
             const repairCostInput = document.getElementById('chpv-repairCost');
             const dduObjectsInput = document.getElementById('chpv-dduObjects');
             const clientDownPaymentInput = document.getElementById('chpv-clientDownPayment');
@@ -948,6 +711,9 @@
             const resultCompanyPV = document.getElementById('chpv-resultCompanyPV');
             const resultClientPV = document.getElementById('chpv-resultClientPV');
             const resultLoanBody = document.getElementById('chpv-resultLoanBody');
+            const resultPVPercent = document.getElementById('chpv-resultPVPercent');
+            const bankCommissionItem = document.getElementById('chpv-bankCommissionItem');
+            const resultBankCommission = document.getElementById('chpv-resultBankCommission');
             const resultDiscountWithoutRepair = document.getElementById('chpv-resultDiscountWithoutRepair');
             
             // Информация о квартире
@@ -957,10 +723,6 @@
             const apartmentRooms = document.getElementById('chpv-apartmentRooms');
             const apartmentArea = document.getElementById('chpv-apartmentArea');
             const apartmentPlan = document.getElementById('chpv-apartmentPlan');
-
-            // Данные из Google Таблицы
-            let apartmentsData = [];
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVMdD1qLq8N3hBj1OV-xVXz5T9wwOcDTPSa09j5Ty7kxm7YY1SErU5fXkoqWxO2zZ2/exec';
 
             // Текущие цены выбранной квартиры
             let currentBasePrice = 0;
@@ -972,40 +734,6 @@
             let currentRoomType = '';
             let currentArea = '';
             let currentPlanUrl = '';
-
-            // Коэффициенты для расчета минимального ПВ
-            const coefficients = {
-                'АСТРО': [
-                    { max: 5000000, value: 0.10 },
-                    { max: 8000000, value: 0.12 },
-                    { max: 12000000, value: 0.15 }
-                ],
-                'ЧИСТЫЕ ПРУДЫ': [
-                    { max: 5000000, value: 0.095 },
-                    { max: 8000000, value: 0.105 },
-                    { max: 14000000, value: 0.135 }
-                ],
-                'Счастье': [
-                    { max: 2000000, value: 0.065 },
-                    { max: 3500000, value: 0.09 },
-                    { max: 6500000, value: 0.11 }
-                ],
-                'Тёплые кварталы': [
-                    { max: 5000000, value: 0.105 },
-                    { max: 8000000, value: 0.125 },
-                    { max: 14000000, value: 0.145 }
-                ],
-                'Бодровский': [
-                    { max: 5000000, value: 0.10 },
-                    { max: 8000000, value: 0.12 },
-                    { max: 14000000, value: 0.14 }
-                ],
-                'Комсомольский': [
-                    { max: 5000000, value: 0.10 },
-                    { max: 8000000, value: 0.12 },
-                    { max: 14000000, value: 0.14 }
-                ]
-            };
 
             // Функция для получения коэффициента для ЖК
             function getCoefficient(complex, basePrice) {
@@ -1022,6 +750,27 @@
                 return complexCoeffs[complexCoeffs.length - 1].value;
             }
 
+            // Функция проверки, является ли ЖК с фиксированным минимальным ПВ
+            function isFixedMinPaymentComplex(complex) {
+                return fixedMinPaymentComplexes.includes(complex);
+            }
+
+            // Функция расчета минимального ПВ клиента
+            function calculateMinClientPayment() {
+                // Если ЖК в списке с фиксированным минимальным ПВ, возвращаем 300 000 ₽
+                if (isFixedMinPaymentComplex(currentComplex)) {
+                    return FIXED_MIN_PAYMENT;
+                }
+                
+                // Для остальных ЖК считаем по коэффициенту
+                const repairCost = parseInt(repairCostInput.value) || 0;
+                const dduObjects = parseInt(dduObjectsInput.value) || 0;
+                const totalBase = currentBasePrice + repairCost + dduObjects;
+                const coefficient = getCoefficient(currentComplex, currentBasePrice);
+                
+                return Math.round(totalBase * coefficient);
+            }
+
             // Загрузка данных из Google Таблицы
             async function loadApartmentsData() {
                 try {
@@ -1030,12 +779,13 @@
                     const data = await response.json();
                     
                     // Фильтруем только квартиры и исключаем статус "Субаренда (продано)"
-                    apartmentsData = data.filter(item => {
+                    chpvApartmentsData.length = 0;
+                    chpvApartmentsData.push(...data.filter(item => {
                         const isApartment = item["Тип помещения"] && item["Тип помещения"].toLowerCase() === "квартира";
                         const isNotSubRent = item["Статус"] !== "Субаренда (продано)";
                         
                         return isApartment && isNotSubRent;
-                    });
+                    }));
                     
                     populateComplexes();
                 } catch (error) {
@@ -1046,7 +796,7 @@
 
             // Заполнение списка ЖК
             function populateComplexes() {
-                const complexes = [...new Set(apartmentsData.map(item => item["Название ЖК"]).filter(Boolean))];
+                const complexes = [...new Set(chpvApartmentsData.map(item => item["Название ЖК"]).filter(Boolean))];
                 complexSelect.innerHTML = '<option value="">Выберите ЖК</option>';
                 complexes.forEach(complex => {
                     const option = document.createElement('option');
@@ -1068,7 +818,7 @@
                 resetCalculation();
 
                 if (complex) {
-                    const sections = [...new Set(apartmentsData
+                    const sections = [...new Set(chpvApartmentsData
                         .filter(item => item["Название ЖК"] === complex)
                         .map(item => item["Название дома"])
                         .filter(Boolean)
@@ -1094,7 +844,7 @@
                 resetCalculation();
 
                 if (complex && section) {
-                    const apartments = apartmentsData
+                    const apartments = chpvApartmentsData
                         .filter(item => 
                             item["Название ЖК"] === complex && 
                             item["Название дома"] === section
@@ -1202,32 +952,44 @@
                     currentDiscountPrice : 
                     currentDiscountPrice + 100000;
             }
-            
-            // Функция расчета минимального ПВ клиента
-            function calculateMinClientPayment() {
-                const repairCost = parseInt(repairCostInput.value) || 0;
-                const dduObjects = parseInt(dduObjectsInput.value) || 0;
-                const totalBase = currentBasePrice + repairCost + dduObjects;
-                const coefficient = getCoefficient(currentComplex, currentBasePrice);
-                
-                return Math.round(totalBase * coefficient);
-            }
-            
+
             // Функция расчета стоимости договора для ДДУ
             function calculateContractPrice() {
                 const adjustedDiscountPrice = getAdjustedDiscountPrice();
                 const repairCost = parseInt(repairCostInput.value) || 0;
                 const dduObjects = parseInt(dduObjectsInput.value) || 0;
                 const clientPV = parseInt(clientDownPaymentInput.value) || 0;
+                const forBank = bankDiscountCheckbox.checked;
                 
                 // Итеративный расчет стоимости договора
                 let contractPrice = adjustedDiscountPrice + repairCost + dduObjects;
-                let companyPV = 0;
+                let bankCommission = 0;
                 
                 // Выполняем несколько итераций для точного расчета
                 for (let i = 0; i < 10; i++) {
-                    companyPV = contractPrice * 0.201 - clientPV;
-                    const newContractPrice = adjustedDiscountPrice + repairCost + dduObjects + companyPV + companyPV * 0.05;
+                    // Рассчитываем общий ПВ как минимум 20.1% от стоимости договора
+                    let totalPV = Math.ceil(contractPrice * 0.201);
+                    
+                    // Рассчитываем ПВ компании
+                    let companyPV = totalPV - clientPV;
+                    
+                    // Рассчитываем тело кредита
+                    let loanBody = contractPrice - totalPV;
+                    
+                    // Если для банка, добавляем комиссию банка 4,3% от тела кредита
+                    if (forBank) {
+                        bankCommission = Math.round(loanBody * BANK_COMMISSION_RATE);
+                    } else {
+                        bankCommission = 0;
+                    }
+                    
+                    // Рассчитываем новую стоимость договора
+                    let newContractPrice = adjustedDiscountPrice + repairCost + dduObjects + companyPV + companyPV * 0.05;
+                    
+                    // Если для банка, добавляем комиссию банка к стоимости договора
+                    if (forBank) {
+                        newContractPrice += bankCommission;
+                    }
                     
                     // Если разница меньше 1 рубля, выходим
                     if (Math.abs(newContractPrice - contractPrice) < 1) {
@@ -1236,7 +998,10 @@
                     contractPrice = newContractPrice;
                 }
                 
-                return Math.round(contractPrice);
+                return {
+                    contractPrice: Math.round(contractPrice),
+                    bankCommission: bankCommission
+                };
             }
             
             // Функция расчета скидки на квартиру без учета ремонта
@@ -1262,6 +1027,9 @@
                 resultCompanyPV.textContent = formatMoney(0);
                 resultClientPV.textContent = formatMoney(0);
                 resultLoanBody.textContent = formatMoney(0);
+                resultPVPercent.textContent = "0%";
+                resultBankCommission.textContent = formatMoney(0);
+                bankCommissionItem.style.display = 'none';
                 resultDiscountWithoutRepair.textContent = "Нет скидки";
                 resultDiscountWithoutRepair.className = "no-discount";
                 
@@ -1276,17 +1044,24 @@
                 }
                 
                 const clientPV = parseInt(clientDownPaymentInput.value) || 0;
+                const forBank = bankDiscountCheckbox.checked;
                 
                 // Рассчитываем минимальный ПВ клиента
                 const minClientPayment = calculateMinClientPayment();
                 
                 // Обновляем информацию о минимальном платеже
-                minPaymentInfo.textContent = `Минимальный первоначальный взнос: ${formatMoney(minClientPayment)}`;
+                if (isFixedMinPaymentComplex(currentComplex)) {
+                    minPaymentInfo.textContent = `Минимальный первоначальный взнос: ${formatMoney(FIXED_MIN_PAYMENT)}`;
+                } else {
+                    const coefficient = getCoefficient(currentComplex, currentBasePrice);
+                    minPaymentInfo.textContent = `Минимальный первоначальный взнос: ${formatMoney(minClientPayment)}`;
+                }
                 
                 // Проверяем, достаточно ли ПВ клиента
                 if (clientPV < minClientPayment) {
                     paymentWarning.style.display = 'block';
-                    paymentWarning.textContent = `Первоначальный взнос клиента меньше минимального требуемого! Необходимо добавить еще ${formatMoney(minClientPayment - clientPV)}`;
+                    const amountToAdd = minClientPayment - clientPV;
+                    paymentWarning.textContent = `Первоначальный взнос клиента меньше минимального требуемого! Необходимо добавить еще ${formatMoney(amountToAdd)}`;
                     
                     // Сбрасываем результаты, если ПВ недостаточно
                     resultContractPrice.textContent = formatMoney(0);
@@ -1294,6 +1069,9 @@
                     resultCompanyPV.textContent = formatMoney(0);
                     resultClientPV.textContent = formatMoney(clientPV);
                     resultLoanBody.textContent = formatMoney(0);
+                    resultPVPercent.textContent = "0%";
+                    resultBankCommission.textContent = formatMoney(0);
+                    bankCommissionItem.style.display = 'none';
                     resultDiscountWithoutRepair.textContent = "Нет скидки";
                     resultDiscountWithoutRepair.className = "no-discount";
                     return;
@@ -1301,22 +1079,39 @@
                     paymentWarning.style.display = 'none';
                 }
                 
-                // Рассчитываем стоимость договора для ДДУ
-                const contractPrice = calculateContractPrice();
+                // Рассчитываем стоимость договора для ДДУ и комиссию банка
+                const calculationResult = calculateContractPrice();
+                const contractPrice = calculationResult.contractPrice;
+                const bankCommission = calculationResult.bankCommission;
                 
-                // Рассчитываем остальные показатели
-                const totalPV = Math.round(contractPrice * 0.201);
+                // Рассчитываем общий ПВ как минимум 20.1% от стоимости договора
+                const totalPV = Math.ceil(contractPrice * 0.201);
                 const companyPV = totalPV - clientPV;
+                
+                // Рассчитываем тело кредита
                 const loanBody = contractPrice - totalPV;
+                
+                // Рассчитываем процент ПВ
+                const pvPercent = (totalPV / contractPrice * 100).toFixed(6);
                 
                 // Рассчитываем скидку на квартиру без учета ремонта
                 const discountWithoutRepair = calculateDiscountWithoutRepair(contractPrice);
                 
+                // Обновляем результаты
                 resultContractPrice.textContent = formatMoney(contractPrice);
                 resultTotalPV.textContent = formatMoney(totalPV);
                 resultCompanyPV.textContent = formatMoney(companyPV);
                 resultClientPV.textContent = formatMoney(clientPV);
                 resultLoanBody.textContent = formatMoney(loanBody);
+                resultPVPercent.textContent = `${pvPercent}%`;
+                
+                // Обновляем отображение комиссии банка
+                if (forBank) {
+                    resultBankCommission.textContent = formatMoney(bankCommission);
+                    bankCommissionItem.style.display = 'flex';
+                } else {
+                    bankCommissionItem.style.display = 'none';
+                }
                 
                 // Обновляем отображение скидки
                 if (discountWithoutRepair > 0) {
@@ -1334,356 +1129,7 @@
                 calculate();
             });
             
-            repairCostInput.addEventListener('input', calculate);
-            dduObjectsInput.addEventListener('input', calculate);
-            clientDownPaymentInput.addEventListener('input', calculate);
-            
-            // Инициализация
-            loadApartmentsData();
-        })();
-
-        // ==================== КАЛЬКУЛЯТОР ЧПВ в ЧП ====================
-        (function() {
-            // Элементы DOM
-            const sectionSelect = document.getElementById('chpv-chp-sectionSelect');
-            const apartmentSelect = document.getElementById('chpv-chp-apartmentSelect');
-            const selectedApartmentInfo = document.getElementById('chpv-chp-selectedApartmentInfo');
-            const apartmentDetails = document.getElementById('chpv-chp-apartmentDetails');
-            const soldNotice = document.getElementById('chpv-chp-soldNotice');
-            const basePriceDisplay = document.getElementById('chpv-chp-basePriceDisplay');
-            const managerDiscountCheckbox = document.getElementById('chpv-chp-managerDiscount');
-            const repairCostInput = document.getElementById('chpv-chp-repairCost');
-            const dduObjectsInput = document.getElementById('chpv-chp-dduObjects');
-            const clientDownPaymentInput = document.getElementById('chpv-chp-clientDownPayment');
-            const minPaymentInfo = document.getElementById('chpv-chp-minPaymentInfo');
-            const paymentWarning = document.getElementById('chpv-chp-paymentWarning');
-            const apartmentFullDetails = document.getElementById('chpv-chp-apartmentFullDetails');
-            
-            // Результаты
-            const resultContractPrice = document.getElementById('chpv-chp-resultContractPrice');
-            const resultTotalPV = document.getElementById('chpv-chp-resultTotalPV');
-            const resultCompanyPV = document.getElementById('chpv-chp-resultCompanyPV');
-            const resultClientPV = document.getElementById('chpv-chp-resultClientPV');
-            const resultLoanBody = document.getElementById('chpv-chp-resultLoanBody');
-            const resultDiscountWithoutRepair = document.getElementById('chpv-chp-resultDiscountWithoutRepair');
-            
-            // Информация о квартире
-            const apartmentComplex = document.getElementById('chpv-chp-apartmentComplex');
-            const apartmentSection = document.getElementById('chpv-chp-apartmentSection');
-            const apartmentNumber = document.getElementById('chpv-chp-apartmentNumber');
-            const apartmentRooms = document.getElementById('chpv-chp-apartmentRooms');
-            const apartmentArea = document.getElementById('chpv-chp-apartmentArea');
-            const apartmentPlan = document.getElementById('chpv-chp-apartmentPlan');
-
-            // Данные из Google Таблицы
-            let apartmentsData = [];
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVMdD1qLq8N3hBj1OV-xVXz5T9wwOcDTPSa09j5Ty7kxm7YY1SErU5fXkoqWxO2zZ2/exec';
-
-            // Текущие цены выбранной квартиры
-            let currentBasePrice = 0;
-            let currentDiscountPrice = 0;
-            let currentStatus = '';
-            let currentComplex = 'ЧИСТЫЕ ПРУДЫ';
-            let currentSection = '';
-            let currentApartmentNumber = '';
-            let currentRoomType = '';
-            let currentArea = '';
-            let currentPlanUrl = '';
-
-            // Коэффициенты для расчета минимального ПВ (только для ЧИСТЫЕ ПРУДЫ)
-            const coefficients = {
-                'ЧИСТЫЕ ПРУДЫ': [
-                    { max: 5000000, value: 0.095 },
-                    { max: 8000000, value: 0.105 },
-                    { max: 14000000, value: 0.135 }
-                ]
-            };
-
-            // Функция для получения коэффициента для ЖК
-            function getCoefficient(complex, basePrice) {
-                const complexCoeffs = coefficients[complex];
-                if (!complexCoeffs) return 0.10; // По умолчанию 10%
-                
-                for (let i = 0; i < complexCoeffs.length; i++) {
-                    if (basePrice <= complexCoeffs[i].max) {
-                        return complexCoeffs[i].value;
-                    }
-                }
-                
-                // Если цена выше всех порогов, берем последний коэффициент
-                return complexCoeffs[complexCoeffs.length - 1].value;
-            }
-
-            // Загрузка данных из Google Таблицы
-            async function loadApartmentsData() {
-                try {
-                    sectionSelect.innerHTML = '<option value="">Загрузка...</option>';
-                    const response = await fetch(SCRIPT_URL);
-                    const data = await response.json();
-                    
-                    // Фильтруем только квартиры и исключаем статус "Субаренда (продано)"
-                    // И оставляем только ЧИСТЫЕ ПРУДЫ
-                    apartmentsData = data.filter(item => {
-                        const isApartment = item["Тип помещения"] && item["Тип помещения"].toLowerCase() === "квартира";
-                        const isNotSubRent = item["Статус"] !== "Субаренда (продано)";
-                        const isChistyePrudy = item["Название ЖК"] === "ЧИСТЫЕ ПРУДЫ";
-                        
-                        return isApartment && isNotSubRent && isChistyePrudy;
-                    });
-                    
-                    populateSections();
-                } catch (error) {
-                    console.error('Ошибка загрузки данных:', error);
-                    sectionSelect.innerHTML = '<option value="">Ошибка загрузки данных</option>';
-                }
-            }
-
-            // Заполнение списка домов для ЧИСТЫЕ ПРУДЫ
-            function populateSections() {
-                const sections = [...new Set(apartmentsData.map(item => item["Название дома"]).filter(Boolean))];
-                sectionSelect.innerHTML = '<option value="">Выберите дом</option>';
-                sections.forEach(section => {
-                    const option = document.createElement('option');
-                    option.value = section;
-                    option.textContent = section;
-                    sectionSelect.appendChild(option);
-                });
-            }
-
-            // При изменении дома
-            sectionSelect.addEventListener('change', function() {
-                const section = this.value;
-                apartmentSelect.disabled = !section;
-                selectedApartmentInfo.style.display = 'none';
-                soldNotice.style.display = 'none';
-                apartmentFullDetails.style.display = 'none';
-                resetCalculation();
-
-                if (section) {
-                    const apartments = apartmentsData
-                        .filter(item => item["Название дома"] === section)
-                        .map(item => ({
-                            number: item["Номер помещения"],
-                            basePrice: item["Цена"],
-                            discountPrice: item["Цена продажи"],
-                            complex: item["Название ЖК"],
-                            section: item["Название дома"],
-                            type: item["Тип помещения"],
-                            status: item["Статус"],
-                            roomType: item["Классическая комнатность"],
-                            area: item["Площадь, м2"],
-                            planUrl: item["3D тур квартиры"]
-                        }));
-
-                    apartmentSelect.innerHTML = '<option value="">Выберите квартиру</option>';
-                    apartments.forEach(apartment => {
-                        const option = document.createElement('option');
-                        option.value = apartment.number;
-                        option.textContent = `Квартира ${apartment.number}`;
-                        option.dataset.basePrice = apartment.basePrice;
-                        option.dataset.discountPrice = apartment.discountPrice;
-                        option.dataset.complex = apartment.complex;
-                        option.dataset.section = apartment.section;
-                        option.dataset.status = apartment.status;
-                        option.dataset.roomType = apartment.roomType;
-                        option.dataset.area = apartment.area;
-                        option.dataset.planUrl = apartment.planUrl || '';
-                        apartmentSelect.appendChild(option);
-                    });
-                }
-            });
-
-            // При изменении квартиры
-            apartmentSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                selectedApartmentInfo.style.display = 'none';
-                soldNotice.style.display = 'none';
-                apartmentFullDetails.style.display = 'none';
-                resetCalculation();
-
-                if (selectedOption.value) {
-                    currentBasePrice = parseInt(selectedOption.dataset.basePrice) || 0;
-                    currentDiscountPrice = parseInt(selectedOption.dataset.discountPrice) || 0;
-                    currentStatus = selectedOption.dataset.status || '';
-                    currentComplex = selectedOption.dataset.complex;
-                    currentSection = selectedOption.dataset.section;
-                    currentApartmentNumber = selectedOption.value;
-                    currentRoomType = selectedOption.dataset.roomType;
-                    currentArea = selectedOption.dataset.area;
-                    currentPlanUrl = selectedOption.dataset.planUrl;
-
-                    // Проверяем статус квартиры
-                    if (currentStatus === "Продано") {
-                        soldNotice.style.display = 'block';
-                        return;
-                    }
-
-                    // Обновляем информацию о выбранной квартире
-                    apartmentDetails.innerHTML = `
-                        <div>ЖК: ${currentComplex}</div>
-                        <div>Дом: ${currentSection}</div>
-                        <div>Квартира: ${currentApartmentNumber}</div>
-                    `;
-                    selectedApartmentInfo.style.display = 'block';
-
-                    // Обновляем полную информацию о квартире в результатах
-                    updateApartmentFullDetails();
-
-                    // Обновляем отображение цен
-                    updatePriceDisplay();
-                    
-                    calculate();
-                }
-            });
-
-            // Функция обновления полной информации о квартире
-            function updateApartmentFullDetails() {
-                apartmentComplex.textContent = `Жилой комплекс: ${currentComplex}`;
-                apartmentSection.textContent = `Дом: ${currentSection}`;
-                apartmentNumber.textContent = `Квартира: ${currentApartmentNumber}`;
-                apartmentRooms.textContent = `Комнатность: ${getRoomTypeText(parseInt(currentRoomType))}`;
-                apartmentArea.textContent = `Площадь: ${currentArea} м²`;
-                
-                // Добавляем кнопку плана квартиры, если есть ссылка
-                if (currentPlanUrl && currentPlanUrl.trim() !== '') {
-                    apartmentPlan.innerHTML = `<a href="${currentPlanUrl}" target="_blank" class="plan-button">План квартиры</a>`;
-                } else {
-                    apartmentPlan.innerHTML = '';
-                }
-                
-                apartmentFullDetails.style.display = 'block';
-            }
-
-            // Функция обновления отображения цен
-            function updatePriceDisplay() {
-                basePriceDisplay.textContent = formatMoney(currentBasePrice);
-            }
-
-            // Функция получения скорректированной цены со скидкой (с учетом чекбокса)
-            function getAdjustedDiscountPrice() {
-                return managerDiscountCheckbox.checked ? 
-                    currentDiscountPrice : 
-                    currentDiscountPrice + 100000;
-            }
-            
-            // Функция расчета минимального ПВ клиента (только для информации)
-            function calculateMinClientPayment() {
-                const repairCost = parseInt(repairCostInput.value) || 0;
-                const dduObjects = parseInt(dduObjectsInput.value) || 0;
-                const totalBase = currentBasePrice + repairCost + dduObjects;
-                const coefficient = getCoefficient(currentComplex, currentBasePrice);
-                
-                return Math.round(totalBase * coefficient);
-            }
-            
-            // Функция расчета стоимости договора для ДДУ
-            function calculateContractPrice() {
-                const adjustedDiscountPrice = getAdjustedDiscountPrice();
-                const repairCost = parseInt(repairCostInput.value) || 0;
-                const dduObjects = parseInt(dduObjectsInput.value) || 0;
-                const clientPV = parseInt(clientDownPaymentInput.value) || 0;
-                
-                // Итеративный расчет стоимости договора
-                let contractPrice = adjustedDiscountPrice + repairCost + dduObjects;
-                let companyPV = 0;
-                
-                // Выполняем несколько итераций для точного расчета
-                for (let i = 0; i < 10; i++) {
-                    companyPV = contractPrice * 0.201 - clientPV;
-                    const newContractPrice = adjustedDiscountPrice + repairCost + dduObjects + companyPV + companyPV * 0.05;
-                    
-                    // Если разница меньше 1 рубля, выходим
-                    if (Math.abs(newContractPrice - contractPrice) < 1) {
-                        break;
-                    }
-                    contractPrice = newContractPrice;
-                }
-                
-                return Math.round(contractPrice);
-            }
-            
-            // Функция расчета скидки на квартиру без учета ремонта
-            function calculateDiscountWithoutRepair(contractPrice) {
-                const repairCost = parseInt(repairCostInput.value) || 0;
-                const priceWithoutRepair = contractPrice - repairCost;
-                
-                if (priceWithoutRepair < currentBasePrice) {
-                    return Math.ceil(currentBasePrice - priceWithoutRepair);
-                }
-                return 0;
-            }
-            
-            // Функция сброса расчетов
-            function resetCalculation() {
-                currentBasePrice = 0;
-                currentDiscountPrice = 0;
-                currentStatus = '';
-                updatePriceDisplay();
-                
-                resultContractPrice.textContent = formatMoney(0);
-                resultTotalPV.textContent = formatMoney(0);
-                resultCompanyPV.textContent = formatMoney(0);
-                resultClientPV.textContent = formatMoney(0);
-                resultLoanBody.textContent = formatMoney(0);
-                resultDiscountWithoutRepair.textContent = "Нет скидки";
-                resultDiscountWithoutRepair.className = "no-discount";
-                
-                minPaymentInfo.textContent = '';
-                paymentWarning.style.display = 'none';
-            }
-            
-            // Функция расчета
-            function calculate() {
-                if (currentStatus === "Продано") {
-                    return; // Не проводим расчеты для проданных квартир
-                }
-                
-                const clientPV = parseInt(clientDownPaymentInput.value) || 0;
-                
-                // Рассчитываем минимальный ПВ клиента (только для информации)
-                const minClientPayment = calculateMinClientPayment();
-                
-                // Обновляем информацию о минимальном платеже (только для справки)
-                minPaymentInfo.textContent = `Минимальный первоначальный взнос: ${formatMoney(minClientPayment)}`;
-                
-                // Проверяем, достаточно ли ПВ клиента (только для информации, без блокировки расчета)
-                if (clientPV < minClientPayment) {
-                    paymentWarning.style.display = 'block';
-                    paymentWarning.textContent = `Первоначальный взнос клиента меньше минимального требуемого! Необходимо добавить еще ${formatMoney(minClientPayment - clientPV)}`;
-                } else {
-                    paymentWarning.style.display = 'none';
-                }
-                
-                // Рассчитываем стоимость договора для ДДУ (всегда, независимо от ПВ)
-                const contractPrice = calculateContractPrice();
-                
-                // Рассчитываем остальные показатели
-                const totalPV = Math.round(contractPrice * 0.201);
-                const companyPV = totalPV - clientPV;
-                const loanBody = contractPrice - totalPV;
-                
-                // Рассчитываем скидку на квартиру без учета ремонта
-                const discountWithoutRepair = calculateDiscountWithoutRepair(contractPrice);
-                
-                resultContractPrice.textContent = formatMoney(contractPrice);
-                resultTotalPV.textContent = formatMoney(totalPV);
-                resultCompanyPV.textContent = formatMoney(companyPV);
-                resultClientPV.textContent = formatMoney(clientPV);
-                resultLoanBody.textContent = formatMoney(loanBody);
-                
-                // Обновляем отображение скидки
-                if (discountWithoutRepair > 0) {
-                    resultDiscountWithoutRepair.textContent = formatMoney(discountWithoutRepair);
-                    resultDiscountWithoutRepair.className = "discount";
-                } else {
-                    resultDiscountWithoutRepair.textContent = "Нет скидки";
-                    resultDiscountWithoutRepair.className = "no-discount";
-                }
-            }
-            
-            // Слушатели событий
-            managerDiscountCheckbox.addEventListener('change', function() {
-                updatePriceDisplay();
+            bankDiscountCheckbox.addEventListener('change', function() {
                 calculate();
             });
             
@@ -1693,10 +1139,11 @@
             
             // Инициализация
             loadApartmentsData();
-        })();
+        }
 
         // ==================== КАЛЬКУЛЯТОР КВ ====================
-        (function() {
+        // Инициализация калькулятора КВ
+        function initKvCalculator() {
             // Элементы DOM
             const complexSelect = document.getElementById('kv-complexSelect');
             const sectionSelect = document.getElementById('kv-sectionSelect');
@@ -1736,8 +1183,7 @@
             const apartmentPlan = document.getElementById('kv-apartmentPlan');
 
             // Данные из Google Таблицы
-            let apartmentsData = [];
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVMdD1qLq8N3hBj1OV-xVXz5T9wwOcDTPSa09j5Ty7kxm7YY1SErU5fXkoqWxO2zZ2/exec';
+            let kvApartmentsData = [];
 
             // Текущие цены выбранной квартиры
             let currentBasePrice = 0;
@@ -1765,7 +1211,7 @@
                     const data = await response.json();
                     
                     // Фильтруем только квартиры и исключаем статус "Субаренда (продано)"
-                    apartmentsData = data.filter(item => {
+                    kvApartmentsData = data.filter(item => {
                         const isApartment = item["Тип помещения"] && item["Тип помещения"].toLowerCase() === "квартира";
                         const isNotSubRent = item["Статус"] !== "Субаренда (продано)";
                         
@@ -1781,7 +1227,7 @@
 
             // Заполнение списка ЖК
             function populateComplexes() {
-                const complexes = [...new Set(apartmentsData.map(item => item["Название ЖК"]).filter(Boolean))];
+                const complexes = [...new Set(kvApartmentsData.map(item => item["Название ЖК"]).filter(Boolean))];
                 complexSelect.innerHTML = '<option value="">Выберите ЖК</option>';
                 complexes.forEach(complex => {
                     const option = document.createElement('option');
@@ -1803,7 +1249,7 @@
                 resetCalculation();
 
                 if (complex) {
-                    const sections = [...new Set(apartmentsData
+                    const sections = [...new Set(kvApartmentsData
                         .filter(item => item["Название ЖК"] === complex)
                         .map(item => item["Название дома"])
                         .filter(Boolean)
@@ -1829,7 +1275,7 @@
                 resetCalculation();
 
                 if (complex && section) {
-                    const apartments = apartmentsData
+                    const apartments = kvApartmentsData
                         .filter(item => 
                             item["Название ЖК"] === complex && 
                             item["Название дома"] === section
@@ -2126,509 +1572,13 @@
             
             // Инициализация
             loadApartmentsData();
-        })();
+        }
 
-        // ==================== КАЛЬКУЛЯТОР РАССРОЧКИ ====================
-        (function() {
-            // Элементы DOM
-            const complexSelect = document.getElementById('installment-complexSelect');
-            const sectionSelect = document.getElementById('installment-sectionSelect');
-            const apartmentSelect = document.getElementById('installment-apartmentSelect');
-            const selectedApartmentInfo = document.getElementById('installment-selectedApartmentInfo');
-            const apartmentDetails = document.getElementById('installment-apartmentDetails');
-            const soldNotice = document.getElementById('installment-soldNotice');
-            const basePriceDisplay = document.getElementById('installment-basePriceDisplay');
-            const discountPriceDisplay = document.getElementById('installment-discountPriceDisplay');
-            const managerDiscountCheckbox = document.getElementById('installment-managerDiscount');
-            const downPaymentSlider = document.getElementById('installment-downPayment');
-            const downPaymentManualRub = document.getElementById('installment-downPaymentManualRub');
-            const downPaymentValue = document.getElementById('installment-downPaymentValue');
-            const downPaymentAmount = document.getElementById('installment-downPaymentAmount');
-            const termInput = document.getElementById('installment-term');
-            const termMin = document.getElementById('installment-termMin');
-            const termValue = document.getElementById('installment-termValue');
-            const termMax = document.getElementById('installment-termMax');
-            const termInfo = document.getElementById('installment-termInfo');
-            const monthlyPaymentInput = document.getElementById('installment-monthlyPayment');
-            const minPaymentInfo = document.getElementById('installment-minPaymentInfo');
-            const apartmentFullDetails = document.getElementById('installment-apartmentFullDetails');
-            
-            // Результаты
-            const resultFinalPrice = document.getElementById('installment-resultFinalPrice');
-            const resultDownPayment = document.getElementById('installment-resultDownPayment');
-            const resultLoanAmount = document.getElementById('installment-resultLoanAmount');
-            const resultMonthlyPayment = document.getElementById('installment-resultMonthlyPayment');
-            const resultTotalPayments = document.getElementById('installment-resultTotalPayments');
-            const resultRemainingAmount = document.getElementById('installment-resultRemainingAmount');
-            const resultTotalAmount = document.getElementById('installment-resultTotalAmount');
-            
-            // Информация о квартире
-            const apartmentComplex = document.getElementById('installment-apartmentComplex');
-            const apartmentSection = document.getElementById('installment-apartmentSection');
-            const apartmentNumber = document.getElementById('installment-apartmentNumber');
-            const apartmentRooms = document.getElementById('installment-apartmentRooms');
-            const apartmentArea = document.getElementById('installment-apartmentArea');
-            const apartmentPlan = document.getElementById('installment-apartmentPlan');
-
-            // Данные из Google Таблицы
-            let apartmentsData = [];
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVMdD1qLq8N3hBj1OV-xVXz5T9wwOcDTPSa09j5Ty7kxm7YY1SErU5fXkoqWxO2zZ2/exec';
-
-            // Текущие цены выбранной квартиры
-            let currentBasePrice = 0;
-            let currentDiscountPrice = 0;
-            let currentStatus = '';
-            let currentComplex = '';
-            let currentSection = '';
-            let currentApartmentNumber = '';
-            let currentRoomType = '';
-            let currentArea = '';
-            let currentMaxTerm = 12;
-            let currentPlanUrl = '';
-
-            // Даты ввода по проектам
-            const deliveryDates = {
-                'ЧИСТЫЕ ПРУДЫ': 'Сентябрь 2027',
-                'Счастье': 'Июнь 2026',
-                'Тёплые кварталы': 'Сентябрь 2026',
-                'Бодровский': 'Декабрь 2026',
-                'Комсомольский': 'Декабрь 2027'
-            };
-
-            // Минимальные платежи по проектам
-            const minPayments = {
-                'АСТРО': {
-                    0: 35000, // Студия
-                    1: 35000, // 1-комн
-                    2: 50000, // 2-комн
-                    3: 70000  // 3-комн
-                },
-                'ЧИСТЫЕ ПРУДЫ': {
-                    0: 35000, // Студия
-                    1: 35000, // 1-комн
-                    2: 50000, // 2-комн
-                    3: 70000  // 3-комн
-                },
-                'Счастье': {
-                    0: 15000, // Студия
-                    1: 15000, // 1-комн
-                    2: 25000, // 2-комн
-                    3: 40000  // 3-комн
-                },
-                'Тёплые кварталы': {
-                    0: 35000, // Студия
-                    1: 35000, // 1-комн
-                    2: 50000, // 2-комн
-                    3: 70000  // 3-комн
-                },
-                'Бодровский': {
-                    0: 35000, // Студия
-                    1: 35000, // 1-комн
-                    2: 50000, // 2-комн
-                    3: 70000  // 3-комн
-                },
-                'Комсомольский': {
-                    0: 35000, // Студия
-                    1: 35000, // 1-комн
-                    2: 50000, // 2-комн
-                    3: 70000  // 3-комн
-                }
-            };
-
-            // Функция для расчета максимального срока рассрочки
-            function calculateMaxTerm(complex) {
-                const deliveryDateStr = deliveryDates[complex];
-                if (!deliveryDateStr) return 12; // По умолчанию 12 месяцев
-                
-                // Парсим дату ввода
-                const [monthStr, yearStr] = deliveryDateStr.split(' ');
-                const months = {
-                    'Январь': 0, 'Февраль': 1, 'Март': 2, 'Апрель': 3, 'Май': 4, 'Июнь': 5,
-                    'Июль': 6, 'Август': 7, 'Сентябрь': 8, 'Октябрь': 9, 'Ноябрь': 10, 'Декабрь': 11
-                };
-                
-                const deliveryDate = new Date(parseInt(yearStr), months[monthStr], 1);
-                const today = new Date();
-                const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-                
-                // Дата окончания рассрочки (за 4 месяца до ввода)
-                const deadlineDate = new Date(deliveryDate);
-                deadlineDate.setMonth(deadlineDate.getMonth() - 4);
-                
-                // Расчет разницы в месяцами
-                let monthsDiff = (deadlineDate.getFullYear() - nextMonth.getFullYear()) * 12;
-                monthsDiff += deadlineDate.getMonth() - nextMonth.getMonth();
-                
-                // Убеждаемся, что срок не отрицательный и не меньше 1 месяца
-                return Math.max(1, monthsDiff);
-            }
-
-            // Функция для получения минимального платежа
-            function getMinPayment(complex, roomType) {
-                // Если комплекс не найден в списке, используем значения по умолчанию
-                if (minPayments[complex]) {
-                    return minPayments[complex][roomType] || minPayments[complex][1]; // По умолчанию для 1-комн
-                }
-                // Значения по умолчанию для неизвестных комплексов
-                return 35000;
-            }
-
-            // Загрузка данных из Google Таблицы
-            async function loadApartmentsData() {
-                try {
-                    complexSelect.innerHTML = '<option value="">Загрузка...</option>';
-                    const response = await fetch(SCRIPT_URL);
-                    const data = await response.json();
-                    
-                    // Фильтруем только квартиры и исключаем проект "АСТРО" и статус "Субаренда (продано)"
-                    apartmentsData = data.filter(item => {
-                        const isApartment = item["Тип помещения"] && item["Тип помещения"].toLowerCase() === "квартира";
-                        const isNotAstro = item["Название ЖК"] && !item["Название ЖК"].toLowerCase().includes("астро");
-                        const isNotSubRent = item["Статус"] !== "Субаренда (продано)";
-                        
-                        return isApartment && isNotAstro && isNotSubRent;
-                    });
-                    
-                    populateComplexes();
-                } catch (error) {
-                    console.error('Ошибка загрузки данных:', error);
-                    complexSelect.innerHTML = '<option value="">Ошибка загрузки данных</option>';
-                }
-            }
-
-            // Заполнение списка ЖК
-            function populateComplexes() {
-                const complexes = [...new Set(apartmentsData.map(item => item["Название ЖК"]).filter(Boolean))];
-                complexSelect.innerHTML = '<option value="">Выберите ЖК</option>';
-                complexes.forEach(complex => {
-                    const option = document.createElement('option');
-                    option.value = complex;
-                    option.textContent = complex;
-                    complexSelect.appendChild(option);
-                });
-            }
-
-            // При изменении ЖК
-            complexSelect.addEventListener('change', function() {
-                const complex = this.value;
-                sectionSelect.disabled = !complex;
-                apartmentSelect.disabled = true;
-                apartmentSelect.innerHTML = '<option value="">Сначала выберите дом</option>';
-                selectedApartmentInfo.style.display = 'none';
-                soldNotice.style.display = 'none';
-                apartmentFullDetails.style.display = 'none';
-                resetCalculation();
-
-                if (complex) {
-                    const sections = [...new Set(apartmentsData
-                        .filter(item => item["Название ЖК"] === complex)
-                        .map(item => item["Название дома"])
-                        .filter(Boolean)
-                    )];
-                    sectionSelect.innerHTML = '<option value="">Выберите дом</option>';
-                    sections.forEach(section => {
-                        const option = document.createElement('option');
-                        option.value = section;
-                        option.textContent = section;
-                        sectionSelect.appendChild(option);
-                    });
-                }
-            });
-
-            // При изменении дома
-            sectionSelect.addEventListener('change', function() {
-                const complex = complexSelect.value;
-                const section = this.value;
-                apartmentSelect.disabled = !section;
-                selectedApartmentInfo.style.display = 'none';
-                soldNotice.style.display = 'none';
-                apartmentFullDetails.style.display = 'none';
-                resetCalculation();
-
-                if (complex && section) {
-                    const apartments = apartmentsData
-                        .filter(item => 
-                            item["Название ЖК"] === complex && 
-                            item["Название дома"] === section
-                        )
-                        .map(item => ({
-                            number: item["Номер помещения"],
-                            basePrice: item["Цена"],
-                            discountPrice: item["Цена продажи"],
-                            complex: item["Название ЖК"],
-                            section: item["Название дома"],
-                            type: item["Тип помещения"],
-                            status: item["Статус"],
-                            roomType: item["Классическая комнатность"],
-                            area: item["Площадь, м2"],
-                            planUrl: item["3D тур квартиры"]
-                        }));
-
-                    apartmentSelect.innerHTML = '<option value="">Выберите квартиру</option>';
-                    apartments.forEach(apartment => {
-                        const option = document.createElement('option');
-                        option.value = apartment.number;
-                        option.textContent = `Квартира ${apartment.number}`;
-                        option.dataset.basePrice = apartment.basePrice;
-                        option.dataset.discountPrice = apartment.discountPrice;
-                        option.dataset.complex = apartment.complex;
-                        option.dataset.section = apartment.section;
-                        option.dataset.status = apartment.status;
-                        option.dataset.roomType = apartment.roomType;
-                        option.dataset.area = apartment.area;
-                        option.dataset.planUrl = apartment.planUrl || '';
-                        apartmentSelect.appendChild(option);
-                    });
-                }
-            });
-
-            // При изменении квартиры
-            apartmentSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                selectedApartmentInfo.style.display = 'none';
-                soldNotice.style.display = 'none';
-                apartmentFullDetails.style.display = 'none';
-                resetCalculation();
-
-                if (selectedOption.value) {
-                    currentBasePrice = parseInt(selectedOption.dataset.basePrice) || 0;
-                    currentDiscountPrice = parseInt(selectedOption.dataset.discountPrice) || 0;
-                    currentStatus = selectedOption.dataset.status || '';
-                    currentComplex = selectedOption.dataset.complex;
-                    currentSection = selectedOption.dataset.section;
-                    currentApartmentNumber = selectedOption.value;
-                    currentRoomType = selectedOption.dataset.roomType;
-                    currentArea = selectedOption.dataset.area;
-                    currentPlanUrl = selectedOption.dataset.planUrl;
-
-                    // Проверяем статус квартиры
-                    if (currentStatus === "Продано") {
-                        soldNotice.style.display = 'block';
-                        return;
-                    }
-
-                    // Обновляем информацию о выбранной квартире
-                    apartmentDetails.innerHTML = `
-                        <div>ЖК: ${currentComplex}</div>
-                        <div>Дом: ${currentSection}</div>
-                        <div>Квартира: ${currentApartmentNumber}</div>
-                    `;
-                    selectedApartmentInfo.style.display = 'block';
-
-                    // Обновляем полную информацию о квартире в результатах
-                    updateApartmentFullDetails();
-
-                    // Обновляем максимальный срок рассрочки
-                    updateMaxTerm();
-
-                    // Обновляем отображение цен
-                    updatePriceDisplay();
-                    
-                    // Обновляем минимальный платеж
-                    updateMinPayment();
-                    
-                    // Обновляем ПВ в рублях на основе текущего процента
-                    updateDownPaymentRub();
-                    
-                    calculate();
-                }
-            });
-
-            // Функция обновления максимального срока рассрочки
-            function updateMaxTerm() {
-                currentMaxTerm = calculateMaxTerm(currentComplex);
-                termInput.max = currentMaxTerm;
-                termMax.textContent = `${currentMaxTerm} мес`;
-                
-                // Устанавливаем значение по умолчанию (максимальный срок для минимальной скидки)
-                termInput.value = currentMaxTerm;
-                termValue.textContent = `${currentMaxTerm} мес`;
-                
-                // Обновляем информацию о сроке
-                const deliveryDate = deliveryDates[currentComplex];
-                if (deliveryDate) {
-                    termInfo.textContent = `Срок рассрочки до: ${deliveryDate} (макс. ${currentMaxTerm} мес)`;
-                } else {
-                    termInfo.textContent = `Максимальный срок рассрочки: ${currentMaxTerm} мес`;
-                }
-            }
-
-            // Функция обновления полной информации о квартире
-            function updateApartmentFullDetails() {
-                apartmentComplex.textContent = `Жилой комплекс: ${currentComplex}`;
-                apartmentSection.textContent = `Дом: ${currentSection}`;
-                apartmentNumber.textContent = `Квартира: ${currentApartmentNumber}`;
-                apartmentRooms.textContent = `Комнатность: ${getRoomTypeText(parseInt(currentRoomType))}`;
-                apartmentArea.textContent = `Площадь: ${currentArea} м²`;
-                
-                // Добавляем кнопку плана квартиры, если есть ссылка
-                if (currentPlanUrl && currentPlanUrl.trim() !== '') {
-                    apartmentPlan.innerHTML = `<a href="${currentPlanUrl}" target="_blank" class="plan-button">План квартиры</a>`;
-                } else {
-                    apartmentPlan.innerHTML = '';
-                }
-                
-                apartmentFullDetails.style.display = 'block';
-            }
-
-            // Функция обновления минимального платежа
-            function updateMinPayment() {
-                const minPayment = getMinPayment(currentComplex, parseInt(currentRoomType));
-                monthlyPaymentInput.min = minPayment;
-                
-                // Обновляем информационное сообщение
-                const roomTypeText = getRoomTypeText(parseInt(currentRoomType));
-                minPaymentInfo.textContent = `Минимальный платеж для ${roomTypeText.toLowerCase()} в ${currentComplex}: ${formatMoney(minPayment)}`;
-                
-                // Если текущее значение меньше минимального, устанавливаем минимальное
-                if (parseInt(monthlyPaymentInput.value) < minPayment) {
-                    monthlyPaymentInput.value = minPayment;
-                }
-            }
-
-            // Функция обновления отображения цен
-            function updatePriceDisplay() {
-                basePriceDisplay.textContent = formatMoney(currentBasePrice);
-                
-                // Применяем скидку менеджера если чекбокс активен
-                const adjustedDiscountPrice = managerDiscountCheckbox.checked ? 
-                    currentDiscountPrice : 
-                    currentDiscountPrice + 100000;
-                    
-                discountPriceDisplay.textContent = formatMoney(adjustedDiscountPrice);
-            }
-
-            // Функция обновления ПВ в рублях на основе процента
-            function updateDownPaymentRub() {
-                const downPaymentPercent = parseInt(downPaymentSlider.value);
-                const finalPrice = calculateFinalPrice(currentBasePrice, getAdjustedDiscountPrice(), downPaymentPercent, parseInt(termInput.value));
-                const downPaymentRub = Math.round(finalPrice * downPaymentPercent / 100);
-                downPaymentManualRub.value = downPaymentRub;
-                downPaymentAmount.textContent = formatMoney(downPaymentRub);
-            }
-
-            // Функция обновления процента ПВ на основе рублевого значения
-            function updateDownPaymentPercent() {
-                const downPaymentRub = parseInt(downPaymentManualRub.value) || 0;
-                const finalPrice = calculateFinalPrice(currentBasePrice, getAdjustedDiscountPrice(), parseInt(downPaymentSlider.value), parseInt(termInput.value));
-                
-                if (finalPrice > 0) {
-                    const percent = Math.round((downPaymentRub / finalPrice) * 100);
-                    // Ограничиваем значение в допустимых пределах
-                    const limitedPercent = Math.max(15, Math.min(80, percent));
-                    downPaymentSlider.value = limitedPercent;
-                    downPaymentValue.textContent = limitedPercent + '%';
-                }
-            }
-
-            // Функция получения скорректированной цены со скидкой (с учетом чекбокса)
-            function getAdjustedDiscountPrice() {
-                return managerDiscountCheckbox.checked ? 
-                    currentDiscountPrice : 
-                    currentDiscountPrice + 100000;
-            }
-            
-            // Функция расчета итоговой цены в зависимости от ПВ и срока рассрочки
-            function calculateFinalPrice(basePrice, discountPrice, downPaymentPercent, term) {
-                const maxDiscount = basePrice - discountPrice;
-                
-                // Коэффициент скидки от ПВ (чем больше ПВ, тем больше скидка)
-                const pvFactor = (downPaymentPercent - 15) / (80 - 15);
-                
-                // Коэффициент скидки от срока (чем меньше срок, тем больше скидка)
-                const termFactor = (currentMaxTerm - term) / (currentMaxTerm - 1);
-                
-                // Общий коэффициент скидки (среднее между скидкой за ПВ и скидкой за срок)
-                const totalDiscountFactor = (pvFactor + termFactor) / 2;
-                
-                const appliedDiscount = maxDiscount * Math.max(0, Math.min(1, totalDiscountFactor));
-                return Math.round(basePrice - appliedDiscount);
-            }
-            
-            // Функция сброса расчетов
-            function resetCalculation() {
-                currentBasePrice = 0;
-                currentDiscountPrice = 0;
-                currentStatus = '';
-                updatePriceDisplay();
-                
-                resultFinalPrice.textContent = formatMoney(0);
-                resultDownPayment.textContent = formatMoney(0);
-                resultLoanAmount.textContent = formatMoney(0);
-                resultMonthlyPayment.textContent = formatMoney(0);
-                resultTotalPayments.textContent = formatMoney(0);
-                resultRemainingAmount.textContent = formatMoney(0);
-                resultTotalAmount.textContent = formatMoney(0);
-                
-                minPaymentInfo.textContent = '';
-                monthlyPaymentInput.min = 0;
-                termInfo.textContent = '';
-            }
-            
-            // Функция расчета
-            function calculate() {
-                if (currentStatus === "Продано") {
-                    return; // Не проводим расчеты для проданных квартир
-                }
-                
-                const adjustedDiscountPrice = getAdjustedDiscountPrice();
-                const downPaymentPercent = parseInt(downPaymentSlider.value);
-                const term = parseInt(termInput.value);
-                const monthlyPayment = parseInt(monthlyPaymentInput.value) || 0;
-                
-                const finalPrice = calculateFinalPrice(currentBasePrice, adjustedDiscountPrice, downPaymentPercent, term);
-                const downPaymentAmountValue = Math.round(finalPrice * downPaymentPercent / 100);
-                const loanAmount = Math.round(finalPrice - downPaymentAmountValue);
-                const totalPayments = Math.round(monthlyPayment * term);
-                const remainingAmount = Math.round(loanAmount - totalPayments);
-                const totalAmount = Math.round(downPaymentAmountValue + totalPayments + Math.max(0, remainingAmount));
-                
-                downPaymentValue.textContent = downPaymentPercent + '%';
-                downPaymentAmount.textContent = formatMoney(downPaymentAmountValue);
-                termValue.textContent = `${term} мес`;
-                
-                resultFinalPrice.textContent = formatMoney(finalPrice);
-                resultDownPayment.textContent = formatMoney(downPaymentAmountValue);
-                resultLoanAmount.textContent = formatMoney(loanAmount);
-                resultMonthlyPayment.textContent = formatMoney(monthlyPayment);
-                resultTotalPayments.textContent = formatMoney(totalPayments);
-                resultRemainingAmount.textContent = formatMoney(remainingAmount);
-                resultTotalAmount.textContent = formatMoney(totalAmount);
-                
-                if (remainingAmount > 0) {
-                    resultRemainingAmount.className = 'highlight warning';
-                } else {
-                    resultRemainingAmount.className = 'highlight';
-                }
-            }
-            
-            // Слушатели событий
-            downPaymentSlider.addEventListener('input', function() {
-                updateDownPaymentRub();
-                calculate();
-            });
-            
-            downPaymentManualRub.addEventListener('input', function() {
-                updateDownPaymentPercent();
-                calculate();
-            });
-            
-            termInput.addEventListener('input', function() {
-                termValue.textContent = `${this.value} мес`;
-                calculate();
-            });
-            
-            monthlyPaymentInput.addEventListener('input', calculate);
-            
-            managerDiscountCheckbox.addEventListener('change', function() {
-                updatePriceDisplay();
-                updateDownPaymentRub();
-                calculate();
-            });
-            
-            // Инициализация
-            loadApartmentsData();
-        })();
+        // Инициализация калькуляторов при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            initChpvCalculator();
+            initKvCalculator();
+        });
     </script>
 </body>
 </html>
